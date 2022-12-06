@@ -4,7 +4,6 @@ import { motion } from 'framer-motion'
 import MotionFramerTest from './components/MotionFramerTest.jsx'
 import { elementVariant, personCardsVariant, personCardVariant } from './data/variants'
 import { persons } from './data/persons.js'
-import TestApp from './test/TestApp'
 
 const FormWrapper = (props) => {
   return (
@@ -164,42 +163,6 @@ const CardInfoModal = ({onCloseModal, activeUser}) => {
   )
 }
 
-const LoginPage = ({ onLogin }) => {
-
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-
-  const emailChangeHandler = (e) => setEmail(e.target.value)
-  const passwordChangeHandler = (e) => setPassword(e.target.value)
-
-  const formSubmitHandler = (e) => {
-    e.preventDefault()
-    onLogin()
-  }
-
-  return (
-    <form onSubmit={formSubmitHandler} className='w-1/2 rounded-xl bg-red-500 p-6 flex flex-col gap-2'>
-      <input value={email} onChange={emailChangeHandler} className={`text-black p-2 rounded flex-1`} type="text" placeholder='Enter email...' />
-      <input value={password} onChange={passwordChangeHandler} className={`text-black p-2 rounded flex-1`} type="text" placeholder='Enter password...' />
-      <button className='p-4 text-black uppercase font-2xl rounded-xl bg-red-300 border-2 border-black'>Submit</button>
-    </form>
-  )
-}
-
-const UserProfilePage = ({onLogout}) => {
-
-  const logoutClickHandler = () => {
-    onLogout()
-    
-  }
-  return (
-    <div className='flex flex-col gap-10'>
-      <h1 className='text-6xl '>Welcome back!</h1>
-      <button onClick={logoutClickHandler} className='p-6 bg-red-700 text-white uppercase font-xl rounded-2xl border-black border-1'>Logout</button>
-    </div>
-  )
-}
-
 function App() {
   // const [personArray, setPersonArray] = useState(persons)
   // const [isShowPersonCards, setIsShowPersonCards] = useState(false)
@@ -233,33 +196,24 @@ function App() {
   //   </div>
   // )
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [names, setNames] = useState(['marin', 'marina', 'kika'])
 
-  const loginHandler = () => {
-    localStorage.setItem('isLoggedIn', '1')
-    setIsLoggedIn(true)
+  // const addName = (e) => setNames(prev => [...prev, e.target.value])
+  const formHandler = (e) => {
+    e.preventDefault()
+    setNames(prev => [...prev, e.target.value])
+    console.log('gwej')
   }
-
-  const logoutHandler = () => {
-    localStorage.removeItem('isLoggedIn')
-    setIsLoggedIn(false)
-  }
-
-  useEffect(() => {
-    if (localStorage.getItem('isLoggedIn' === '1')) {
-      setIsLoggedIn(true)
-    }
-  }, [])
 
   return (
-    // <TestApp />
-    <>
-      { !isLoggedIn && <LoginPage onLogin={loginHandler} /> }
-      { isLoggedIn && <UserProfilePage onLogout={logoutHandler} /> }
-
-    </>
+    <div>
+      <form onSubmit={formHandler} />
+        <input className='border-black border-2' type="text" /> <br/>
+        <button onClick={formHandler} className='p-6 bg-blue-600'>Submit </button>
+      <form/>
+      {names.map(name => <p key={name}>{name}</p>)}
+    </div>
   )
-  
 }
 
 export default App
