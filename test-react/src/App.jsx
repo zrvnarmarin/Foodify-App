@@ -1,9 +1,10 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion'
 import MotionFramerTest from './components/MotionFramerTest.jsx'
 import { elementVariant, personCardsVariant, personCardVariant } from './data/variants'
 import { persons } from './data/persons.js'
+import TestApp from './test/TestApp'
 
 const FormWrapper = (props) => {
   return (
@@ -32,7 +33,8 @@ const NewPersonForm = ({onSaveNewPerson}) => {
 
     const newPersonObject = {
       name: name,
-      age: age
+      age: age,
+      placeOfResidence: placeOfResidence
     }
 
     onSaveNewPerson(newPersonObject)
@@ -92,10 +94,6 @@ const PersonCard = ({persons}) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [active, setActive] = useState({})
 
-  const openModal = () => {
-    setIsModalOpen(true)
-    setActive()
-  }
   const closeModal = () => setIsModalOpen(false)
 
   return (
@@ -107,11 +105,11 @@ const PersonCard = ({persons}) => {
             key={person.id}
             onClick={() => {
               setActive(person)
+              setIsModalOpen(true)
             }}
             className='bg-yellow-500 border-2 border-black w-full text-center p-2 flex cursor-pointer'
           >
             <div 
-              onClick={openModal}
               key={person.id} 
               className='flex gap-2 items-center'
             >
@@ -155,7 +153,7 @@ const CardInfoModal = ({onCloseModal, activeUser}) => {
         </div>
         <div className='flex flex-row items-center justify-around'>
           <span className='text-normal uppercase font-bold'>Residence: </span>
-          <p className='text-2xl uppercase font-bold'>{activeUser.placeOfResidence}</p>
+          <p className='text-2xl uppercase font-bold text-black'>{activeUser.placeOfResidence}</p>
         </div>
         <div className='flex flex-row gap-4 items-center justify-center mt-8'>
           <button onClick={onCloseModal} className='bg-green-600 rounded-2xl p-6 text-white uppercase text-4xl w-3/4'>Close</button>
@@ -166,38 +164,79 @@ const CardInfoModal = ({onCloseModal, activeUser}) => {
   )
 }
 
-function App() {
-  const [personArray, setPersonArray] = useState(persons)
-  const [isShowPersonCards, setIsShowPersonCards] = useState(false)
-  const [isShowForm, setIsShowForm] = useState(false)
+// const LoginPage = ({ onLogin }) => {
 
-  const addPerson = (personObject) => setPersonArray(persons => [...persons, personObject])
-  const togglePersonCards = () => setIsShowPersonCards(prev => !prev)
-  const toggleForm = () => setIsShowForm(prev => !prev)
+//   const [email, setEmail] = useState('')
+//   const [password, setPassword] = useState('')
+
+//   const emailChangeHandler = (e) => setEmail(e.target.value)
+//   const passwordChangeHandler = (e) => setPassword(e.target.value)
+
+//   const formSubmitHandler = (e) => {
+//     e.preventDefault()
+//     onLogin()
+//   }
+
+//   return (
+//     <form onSubmit={formSubmitHandler} className='w-1/2 rounded-xl bg-red-500 p-6 flex flex-col gap-2'>
+//       <input value={email} onChange={emailChangeHandler} className={`text-black p-2 rounded flex-1`} type="text" placeholder='Enter email...' />
+//       <input value={password} onChange={passwordChangeHandler} className={`text-black p-2 rounded flex-1`} type="text" placeholder='Enter password...' />
+//       <button className='p-4 text-black uppercase font-2xl rounded-xl bg-red-300 border-2 border-black'>Submit</button>
+//     </form>
+//   )
+// }
+
+// const UserProfilePage = ({onLogout}) => {
+
+//   const logoutClickHandler = () => {
+//     onLogout()
+    
+//   }
+//   return (
+//     <div className='flex flex-col gap-10'>
+//       <h1 className='text-6xl '>Welcome back!</h1>
+//       <button onClick={logoutClickHandler} className='p-6 bg-red-700 text-white uppercase font-xl rounded-2xl border-black border-1'>Logout</button>
+//     </div>
+//   )
+// }
+
+function App() {
+  // const [personArray, setPersonArray] = useState(persons)
+  // const [isShowPersonCards, setIsShowPersonCards] = useState(false)
+  // const [isShowForm, setIsShowForm] = useState(false)
+
+  // const addPerson = (personObject) => setPersonArray(persons => [...persons, personObject])
+  // const togglePersonCards = () => setIsShowPersonCards(prev => !prev)
+  // const toggleForm = () => setIsShowForm(prev => !prev)
+
+  // return (
+  //   <div className='flex flex-col justify-center items-center'>
+  //     { isShowForm && <FormWrapper>
+  //       <NewPerson onAddNewPerson={addPerson} />
+  //     </FormWrapper>}
+
+  //     <button 
+  //       onClick={toggleForm}
+  //       className='px-6 py-2 text-white bg-green-500 text-2xl uppercase rounded-md mt-4'
+  //     >
+  //       {!isShowForm ? 'Enter New Person' : 'Cancel'}
+  //     </button>
+
+  //     <button 
+  //       onClick={togglePersonCards}
+  //       className='px-6 py-2 text-white bg-green-500 text-2xl uppercase rounded-md mt-4'
+  //     >
+  //       {isShowPersonCards ? 'Hide Persons' : 'Show Persons'}
+  //     </button>
+
+  //     {isShowPersonCards && <PersonCard persons={personArray} />}
+  //   </div>
+  // )
 
   return (
-    <div className='flex flex-col justify-center items-center'>
-      { isShowForm && <FormWrapper>
-        <NewPerson onAddNewPerson={addPerson} />
-      </FormWrapper>}
-
-      <button 
-        onClick={toggleForm}
-        className='px-6 py-2 text-white bg-green-500 text-2xl uppercase rounded-md mt-4'
-      >
-        {!isShowForm ? 'Enter New Person' : 'Cancel'}
-      </button>
-
-      <button 
-        onClick={togglePersonCards}
-        className='px-6 py-2 text-white bg-green-500 text-2xl uppercase rounded-md mt-4'
-      >
-        {isShowPersonCards ? 'Hide Persons' : 'Show Persons'}
-      </button>
-
-      {isShowPersonCards && <PersonCard persons={personArray} />}
-    </div>
+    <TestApp />
   )
+  
 }
 
 export default App
