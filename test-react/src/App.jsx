@@ -35,7 +35,7 @@ const reducer = (state, action) => {
       return { ...state, phone: '' }
     }
     case ACTIONS.ADD_EMPLOYEE: {
-     return { name: state.name, department: state.department, phone: state.phone, employees: [action.payload, ...state.employees] }
+     return { name: state.name, department: state.department, phone: state.phone, employees: [...state.employees, action.payload] }
     }
   }
 }
@@ -56,7 +56,6 @@ const App = () => {
   const nameChangeHandler = e => dispatch({type: ACTIONS.SET_NAME, payload: e.target.value})
   const departmentChangeHandler = e => dispatch({type: ACTIONS.SET_DEPARTMENT, payload: e.target.value})
   const phoneChangeHandler = e => dispatch({type: ACTIONS.SET_PHONE, payload: e.target.value})
-
   
   return (
     <div>
