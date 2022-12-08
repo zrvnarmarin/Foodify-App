@@ -1,217 +1,115 @@
-import { useState, useRef, useEffect } from 'react'
-import { createPortal } from 'react-dom';
-import { motion } from 'framer-motion'
-import MotionFramerTest from './components/MotionFramerTest.jsx'
-import { elementVariant, personCardsVariant, personCardVariant } from './data/variants'
-import { persons } from './data/persons.js'
+import React, { useReducer } from 'react'
+import { useRef } from 'react'
+import { useState } from 'react'
 
-const FormWrapper = (props) => {
-  return (
-    <motion.div
-      variants={elementVariant}
-      initial="hidden"
-      animate="visible"
-      className='bg-green-700 border-4 border-black rounded-xl p-10 w-1/4'
-    >
-      {props.children}
-    </motion.div>
-  )
+const ACTIONS = {
+  SET_NAME: 'set name',
+  SET_DEPARTMENT: 'set department',
+  SET_PHONE: 'set phone',
+  RESET_NAME: 'reset name',
+  RESET_DEPARTMENT: 'reset department',
+  RESET_PHONE: 'reset phone',
+  ADD_EMPLOYEE: 'add employee', 
+  EDIT_EMPLOYEE: 'edit employee',
+  DELETE_EMPLOYEE: 'delete employee'
 }
 
-const NewPersonForm = ({onSaveNewPerson}) => {
-  const [name, setName] = useState('')
-  const [age, setAge] = useState('')
-  const [placeOfResidence, setPlaceOfResidence] = useState('')
+const reducer = (state, action) => {
+  switch (action.type) {
+    case ACTIONS.SET_NAME: {
+      return { ...state, name: action.payload }
+    }
+    case ACTIONS.SET_DEPARTMENT: {
+      return { ...state, department: action.payload }
+    }
+    case ACTIONS.SET_PHONE: {
+      return { ...state, phone: action.payload }
+    }
+    case ACTIONS.RESET_NAME: {
+      return { ...state, name: '' }
+    }
+    case ACTIONS.RESET_DEPARTMENT: {
+      return { ...state, department: '' }
+    }
+    case ACTIONS.RESET_PHONE: {
+      return { ...state, phone: '' }
+    }
+    case ACTIONS.ADD_EMPLOYEE: {
+     return { name: state.name, department: state.department, phone: state.phone, employees: [action.payload, ...state.employees] }
+    }
+  }
+}
 
-  const nameInputHandler = e => setName(e.target.value)
-  const ageInputHandler = e => setAge(e.target.value)
-  const placeOfResidenceInputHandler = e => setPlaceOfResidence(e.target.value)
+const App = () => {
+  const [state, dispatch] = useReducer(reducer, { name: ' ', department: ' ', phone: ' ', employees: [] })
+  const [isNewEmployeeShown, setIsNewEmployeeShown] = useState(false)
 
-  const formSubmitHandler = (e) => {
+  const toggleNewEmployee = () => setIsNewEmployeeShown(prev => !prev)
+  const submitHandler = e => {
     e.preventDefault()
-
-    const newPersonObject = {
-      name: name,
-      age: age,
-      placeOfResidence: placeOfResidence
-    }
-
-    onSaveNewPerson(newPersonObject)
-    resetForm()
+    dispatch({type: ACTIONS.RESET_NAME})
+    dispatch({type: ACTIONS.RESET_PHONE})
+    dispatch({type: ACTIONS.RESET_DEPARTMENT})
+    dispatch({type: ACTIONS.ADD_EMPLOYEE, payload: {name: state.name, department: state.department, phone: state.phone }})
   }
 
-  const resetForm = () => {
-    setName('')
-    setAge('')
-    setPlaceOfResidence('')
-  }
+  const nameChangeHandler = e => dispatch({type: ACTIONS.SET_NAME, payload: e.target.value})
+  const departmentChangeHandler = e => dispatch({type: ACTIONS.SET_DEPARTMENT, payload: e.target.value})
+  const phoneChangeHandler = e => dispatch({type: ACTIONS.SET_PHONE, payload: e.target.value})
 
-  return(
-    <form 
-      onSubmit={formSubmitHandler} 
-      className='bg-green-300 rounded-2xl p-8 border-solid border-black flex flex-col justify-center items-center gap-8'
-    >
-      <input onChange={nameInputHandler} value={name} className='p-2 rounded outline-red' type="text" placeholder='Enter name...' />
-      <input onChange={ageInputHandler} value={age} className='p-2 rounded outline-red' type="text" placeholder='Enter age...' />
-      <input onChange={placeOfResidenceInputHandler} value={placeOfResidence} className='p-2 rounded outline-red' type="text" placeholder='Enter place of residence...' />
-      <button className='px-6 py-2 text-white bg-green-500 text-2xl uppercase rounded-md'>Submit</button>
-    </form>
-  )
-}
-
-const NewPerson = ({onAddNewPerson}) => {
-
-  const saveNewPerson = (newPersonObject) => {
-    const newPerson = {
-      ...newPersonObject,
-      id: Math.floor(Math.random() * 1000)
-    }
-
-    onAddNewPerson(newPerson)
-  }
   
   return (
-    <>
-      <NewPersonForm onSaveNewPerson={saveNewPerson} />
-    </>
-  )
-}
-
-const PersonCardWrapper = (props) => {
-  return (
-    <motion.div
-      variants={personCardsVariant}
-      initial="hidden"
-      animate="visible" 
-      className='bg-green-500 p-4 border-black border-2 rounded-xl flex flex-row gap-2 mt-4 max-w-3/4'>
-      {props.children}
-    </motion.div>
-  )
-}
-
-const PersonCard = ({persons}) => {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [active, setActive] = useState({})
-
-  const closeModal = () => setIsModalOpen(false)
-
-  return (
-    <>
-      <PersonCardWrapper>
-        {persons.map(person =>
-          <motion.div
-            variants={personCardVariant}
-            key={person.id}
-            onClick={() => {
-              setActive(person)
-              setIsModalOpen(true)
-            }}
-            className='bg-yellow-500 border-2 border-black w-full text-center p-2 flex cursor-pointer'
-          >
-            <div 
-              key={person.id} 
-              className='flex gap-2 items-center'
-            >
-              <span className='text-sm bg-yellow-700 text-white p-1'>{`#${person.id}`}</span>
-              <p className='text-black uppercase text-2xl'>{person.name}</p>
-            </div>
-          </motion.div>
-        )}
-      </PersonCardWrapper>
-      
-      { isModalOpen && createPortal(<CardInfoModal onCloseModal={closeModal} activeUser={active} />, document.getElementById('modal-overlay')) }
-    </>
-  )
-}
-
-const CardInfoModalWrapper = (props) => {
-  return (
-    <motion.div 
-    initial={{ opacity: 0}}
-    animate={{ opacity: 1 }}
-    transition={{ type: 'spring', delay: 0.2 }}
-    className='w-screen h-screen bg-black bg-opacity-95 z-40 absolute top-0 left-0 flex flex-col justify-center items-center'
-    >
-      {props.children}
-    </motion.div>
-  )
-}
-
-const CardInfoModal = ({onCloseModal, activeUser}) => {
-  console.log(activeUser)
-  return (
-    <CardInfoModalWrapper>
-      <div className='flex bg-white p-4 rounded-xl border-2 border-black flex-col w-1/2'>
-        <div className='flex gap-2 items-center justify-center'>
-          <p className='text-md bg-black rounded-xl p-1 text-white flex items-center'>#{activeUser.id}</p>
-          <p className='text-4xl uppercase font-semibold'>{activeUser.name}</p>
-        </div>
-        <div className='flex flex-row items-center justify-around'>
-          <span className='text-normal uppercase font-bold'>Age: </span>
-          <p className='text-2xl uppercase font-bold'>{activeUser.age}</p>
-        </div>
-        <div className='flex flex-row items-center justify-around'>
-          <span className='text-normal uppercase font-bold'>Residence: </span>
-          <p className='text-2xl uppercase font-bold text-black'>{activeUser.placeOfResidence}</p>
-        </div>
-        <div className='flex flex-row gap-4 items-center justify-center mt-8'>
-          <button onClick={onCloseModal} className='bg-green-600 rounded-2xl p-6 text-white uppercase text-4xl w-3/4'>Close</button>
-        </div>
-      </div>
-      
-    </CardInfoModalWrapper>
-  )
-}
-
-function App() {
-  // const [personArray, setPersonArray] = useState(persons)
-  // const [isShowPersonCards, setIsShowPersonCards] = useState(false)
-  // const [isShowForm, setIsShowForm] = useState(false)
-
-  // const addPerson = (personObject) => setPersonArray(persons => [...persons, personObject])
-  // const togglePersonCards = () => setIsShowPersonCards(prev => !prev)
-  // const toggleForm = () => setIsShowForm(prev => !prev)
-
-  // return (
-  //   <div className='flex flex-col justify-center items-center'>
-  //     { isShowForm && <FormWrapper>
-  //       <NewPerson onAddNewPerson={addPerson} />
-  //     </FormWrapper>}
-
-  //     <button 
-  //       onClick={toggleForm}
-  //       className='px-6 py-2 text-white bg-green-500 text-2xl uppercase rounded-md mt-4'
-  //     >
-  //       {!isShowForm ? 'Enter New Person' : 'Cancel'}
-  //     </button>
-
-  //     <button 
-  //       onClick={togglePersonCards}
-  //       className='px-6 py-2 text-white bg-green-500 text-2xl uppercase rounded-md mt-4'
-  //     >
-  //       {isShowPersonCards ? 'Hide Persons' : 'Show Persons'}
-  //     </button>
-
-  //     {isShowPersonCards && <PersonCard persons={personArray} />}
-  //   </div>
-  // )
-
-  const [names, setNames] = useState(['marin', 'marina', 'kika'])
-
-  // const addName = (e) => setNames(prev => [...prev, e.target.value])
-  const formHandler = (e) => {
-    e.preventDefault()
-    setNames(prev => [...prev, e.target.value])
-    console.log('gwej')
-  }
-
-  return (
     <div>
-      <form onSubmit={formHandler} />
-        <input className='border-black border-2' type="text" /> <br/>
-        <button onClick={formHandler} className='p-6 bg-blue-600'>Submit </button>
-      <form/>
-      {names.map(name => <p key={name}>{name}</p>)}
+
+      <div className='flex fle-row justify-between p-2'>
+        <h1 className='text-4xl font-robotoSlab'>Employee Details</h1>
+        <button onClick={toggleNewEmployee} className='rounded-3xl text-white font-robotoSlab bg-emerald-500 px-4 py-2 font-medium'>+ Add New</button>
+      </div>
+
+      <table className='m-2'>
+        <thead>
+          <tr>
+            <td className='border-[1px] border-gray-200 text-black text-xl font-medium font-robotoSlab p-2 pr-12'>Name</td>
+            <td className='border-[1px] border-gray-200 text-black text-xl font-medium font-robotoSlab p-2 pr-12'>Department</td>
+            <td className='border-[1px] border-gray-200 text-black text-xl font-medium font-robotoSlab p-2 pr-12'>Phone</td>
+            <td className='border-[1px] border-gray-200 text-black text-xl font-medium font-robotoSlab p-2 pr-12'>Actions</td>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            {/* <td className='border-[1px] border-gray-200 text-black text-xl font-normal font-robotoSlab p-2'>
+              <span>{state.name}</span> <span>{state.surname}</span>
+            </td>
+            <td className='border-[1px] border-gray-200 text-black text-xl font-normal font-robotoSlab p-2'>{state.department}</td>
+            <td className='border-[1px] border-gray-200 text-black text-xl font-normal font-robotoSlab p-2'>{state.phone}</td> */}
+            {/* <td className='p-2 flex flex-row flex-wrap items-center justify-center gap-1 border-r-[1px] border-b-[1px] border-gray-200'>
+              <button className='rounded-3xl text-white font-robotoSlab bg-yellow-500 px-4 py-2 font-medium'>Edit</button>
+              <button className='rounded-3xl text-white font-robotoSlab bg-red-500 px-4 py-2 font-medium'>Delete</button>
+            </td> */}
+          </tr>
+
+          
+
+        </tbody>
+      </table>
+      { isNewEmployeeShown && 
+            <form onSubmit={submitHandler}>
+                <input onChange={nameChangeHandler} className='border-gray-300 border-[1px] p-1' type="text" />
+                <input onChange={departmentChangeHandler} className='border-gray-300 border-[1px] p-1' type="text" />
+                <input onChange={phoneChangeHandler} className='border-gray-300 border-[1px] p-1' type="text" />
+                <button type='submit' className='rounded-3xl text-white font-robotoSlab bg-blue-500 px-4 py-2 font-medium'>Add</button>
+                <button type='button' className='rounded-3xl text-white font-robotoSlab bg-red-500 px-4 py-2 font-medium'>Delete</button>
+            </form>
+          }
+      <div className='bg-gree-300'>
+        STATES: 
+        <p>1. name: {state.name}</p>
+        <p>2. department: {state.department}</p>
+        <p>3. phone: {state.phone}</p>
+      </div>
+      ALL EMPLOYEES: {JSON.stringify(state.employees)}
+
     </div>
   )
 }
