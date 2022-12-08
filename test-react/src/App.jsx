@@ -1,6 +1,4 @@
-import React, { useReducer } from 'react'
-import { useRef } from 'react'
-import { useState } from 'react'
+import React, { useState, useReducer, useRef } from 'react'
 
 const ACTIONS = {
   SET_NAME: 'set name',
@@ -35,22 +33,31 @@ const reducer = (state, action) => {
       return { ...state, phone: '' }
     }
     case ACTIONS.ADD_EMPLOYEE: {
-     return { name: state.name, department: state.department, phone: state.phone, employees: [...state.employees, action.payload] }
+     return { ...state, employees: [...state.employees, action.payload] }
     }
   }
 }
 
 const App = () => {
-  const [state, dispatch] = useReducer(reducer, { name: ' ', department: ' ', phone: ' ', employees: [] })
+  const [state, dispatch] = useReducer(reducer, { name: '', department: '', phone: '', employees: [] })
   const [isNewEmployeeShown, setIsNewEmployeeShown] = useState(false)
+  const buttonRef = useRef()
 
-  const toggleNewEmployee = () => setIsNewEmployeeShown(prev => !prev)
+  const toggleNewEmployee = () => {
+    if (!isNewEmployeeShown) { buttonRef.current.disabled = true }
+    setIsNewEmployeeShown(prev => !prev)
+  } 
   const submitHandler = e => {
     e.preventDefault()
     dispatch({type: ACTIONS.RESET_NAME})
     dispatch({type: ACTIONS.RESET_PHONE})
     dispatch({type: ACTIONS.RESET_DEPARTMENT})
     dispatch({type: ACTIONS.ADD_EMPLOYEE, payload: {name: state.name, department: state.department, phone: state.phone }})
+  }
+
+  const deleteAddNewEmployeeForm = () => {
+    buttonRef.current.disabled = false
+    setIsNewEmployeeShown(false)
   }
 
   const nameChangeHandler = e => dispatch({type: ACTIONS.SET_NAME, payload: e.target.value})
@@ -62,7 +69,15 @@ const App = () => {
 
       <div className='flex fle-row justify-between p-2'>
         <h1 className='text-4xl font-robotoSlab'>Employee Details</h1>
-        <button onClick={toggleNewEmployee} className='rounded-3xl text-white font-robotoSlab bg-emerald-500 px-4 py-2 font-medium'>+ Add New</button>
+        <button 
+          ref={buttonRef} 
+          onClick={toggleNewEmployee} 
+          className={`rounded-3xl text-white font-robotoSlab opacity-50 
+           bg-emerald-500 px-4 py-2 font-medium 
+           ${isNewEmployeeShown ? 'opacity-50' : 'opacity-100'}`}
+        >
+          + Add New
+        </button>
       </div>
 
       <table className='m-2'>
@@ -94,11 +109,11 @@ const App = () => {
       </table>
       { isNewEmployeeShown && 
             <form onSubmit={submitHandler}>
-                <input onChange={nameChangeHandler} className='border-gray-300 border-[1px] p-1' type="text" />
-                <input onChange={departmentChangeHandler} className='border-gray-300 border-[1px] p-1' type="text" />
-                <input onChange={phoneChangeHandler} className='border-gray-300 border-[1px] p-1' type="text" />
+                <input value={state.name} onChange={nameChangeHandler} className='border-gray-300 border-[1px] p-1' type="text" />
+                <input value={state.department} onChange={departmentChangeHandler} className='border-gray-300 border-[1px] p-1' type="text" />
+                <input value={state.phone} onChange={phoneChangeHandler} className='border-gray-300 border-[1px] p-1' type="text" />
                 <button type='submit' className='rounded-3xl text-white font-robotoSlab bg-blue-500 px-4 py-2 font-medium'>Add</button>
-                <button type='button' className='rounded-3xl text-white font-robotoSlab bg-red-500 px-4 py-2 font-medium'>Delete</button>
+                <button onClick={deleteAddNewEmployeeForm} type='button' className='rounded-3xl text-white font-robotoSlab bg-red-500 px-4 py-2 font-medium'>Delete</button>
             </form>
           }
       <div className='bg-gree-300'>
