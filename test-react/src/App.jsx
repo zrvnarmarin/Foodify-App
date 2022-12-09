@@ -35,6 +35,9 @@ const reducer = (state, action) => {
     case ACTIONS.ADD_EMPLOYEE: {
      return { ...state, employees: [...state.employees, action.payload] }
     }
+    case ACTIONS.DELETE_EMPLOYEE: {
+      return { ...state, employees: state.employees.filter(employee => employee.id !== action.payload.id) }
+    }
   }
 }
 
@@ -49,15 +52,25 @@ const App = () => {
   } 
   const submitHandler = e => {
     e.preventDefault()
+
+    if (state.name === '' || state.department === '' || state.phone === '') return
+
+    resetInputs()
+
+    dispatch({type: ACTIONS.ADD_EMPLOYEE, 
+      payload: {id: Math.floor((1 + Math.random()) * 0x10000), name: state.name, department: state.department, phone: state.phone }})
+  }
+
+  const deleteNewEmployeeForm = () => {
+    buttonRef.current.disabled = false
+    setIsNewEmployeeShown(false)
+    resetInputs()
+  }
+
+  const resetInputs = () => {
     dispatch({type: ACTIONS.RESET_NAME})
     dispatch({type: ACTIONS.RESET_PHONE})
     dispatch({type: ACTIONS.RESET_DEPARTMENT})
-    dispatch({type: ACTIONS.ADD_EMPLOYEE, payload: {name: state.name, department: state.department, phone: state.phone }})
-  }
-
-  const deleteAddNewEmployeeForm = () => {
-    buttonRef.current.disabled = false
-    setIsNewEmployeeShown(false)
   }
 
   const nameChangeHandler = e => dispatch({type: ACTIONS.SET_NAME, payload: e.target.value})
@@ -91,38 +104,38 @@ const App = () => {
         </thead>
 
         <tbody>
-          <tr>
-            {/* <td className='border-[1px] border-gray-200 text-black text-xl font-normal font-robotoSlab p-2'>
-              <span>{state.name}</span> <span>{state.surname}</span>
-            </td>
-            <td className='border-[1px] border-gray-200 text-black text-xl font-normal font-robotoSlab p-2'>{state.department}</td>
-            <td className='border-[1px] border-gray-200 text-black text-xl font-normal font-robotoSlab p-2'>{state.phone}</td> */}
-            {/* <td className='p-2 flex flex-row flex-wrap items-center justify-center gap-1 border-r-[1px] border-b-[1px] border-gray-200'>
-              <button className='rounded-3xl text-white font-robotoSlab bg-yellow-500 px-4 py-2 font-medium'>Edit</button>
-              <button className='rounded-3xl text-white font-robotoSlab bg-red-500 px-4 py-2 font-medium'>Delete</button>
-            </td> */}
-          </tr>
-
-          
-
+          {state.employees.map(employee => 
+            <tr key={employee.id}>
+              <td className='border-[1px] border-gray-200 text-black text-xl font-normal font-robotoSlab p-2'>{employee.name}</td>
+              <td className='border-[1px] border-gray-200 text-black text-xl font-normal font-robotoSlab p-2'>{employee.department}</td>
+              <td className='border-[1px] border-gray-200 text-black text-xl font-normal font-robotoSlab p-2'>{employee.phone}</td>
+              <td className='p-2 flex flex-row flex-wrap items-center justify-center gap-1 border-r-[1px] border-b-[1px] border-gray-200'>
+                <button className='rounded-3xl text-white font-robotoSlab bg-yellow-500 px-4 py-2 font-medium'>Edit</button>
+                <button onClick={() => {
+                  dispatch({ type: ACTIONS.DELETE_EMPLOYEE, payload: { id: employee.id } })
+                }} className='rounded-3xl text-white font-robotoSlab bg-red-500 px-4 py-2 font-medium'>Delete</button>
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
+
       { isNewEmployeeShown && 
-            <form onSubmit={submitHandler}>
-                <input value={state.name} onChange={nameChangeHandler} className='border-gray-300 border-[1px] p-1' type="text" />
-                <input value={state.department} onChange={departmentChangeHandler} className='border-gray-300 border-[1px] p-1' type="text" />
-                <input value={state.phone} onChange={phoneChangeHandler} className='border-gray-300 border-[1px] p-1' type="text" />
-                <button type='submit' className='rounded-3xl text-white font-robotoSlab bg-blue-500 px-4 py-2 font-medium'>Add</button>
-                <button onClick={deleteAddNewEmployeeForm} type='button' className='rounded-3xl text-white font-robotoSlab bg-red-500 px-4 py-2 font-medium'>Delete</button>
-            </form>
-          }
-      <div className='bg-gree-300'>
+        <form onSubmit={submitHandler}>
+            <input value={state.name} onChange={nameChangeHandler} className='border-gray-300 border-[1px] p-1' type="text" />
+            <input value={state.department} onChange={departmentChangeHandler} className='border-gray-300 border-[1px] p-1' type="text" />
+            <input value={state.phone} onChange={phoneChangeHandler} className='border-gray-300 border-[1px] p-1' type="text" />
+            <button type='submit' className='rounded-3xl text-white font-robotoSlab bg-blue-500 px-4 py-2 font-medium'>Add</button>
+            <button onClick={deleteNewEmployeeForm} type='button' className='rounded-3xl text-white font-robotoSlab bg-red-500 px-4 py-2 font-medium'>Delete</button>
+        </form>
+      }
+      {/* <div className='bg-gree-300'>
         STATES: 
         <p>1. name: {state.name}</p>
         <p>2. department: {state.department}</p>
         <p>3. phone: {state.phone}</p>
       </div>
-      ALL EMPLOYEES: {JSON.stringify(state.employees)}
+      ALL EMPLOYEES: {JSON.stringify(state.employees)} */}
 
     </div>
   )
