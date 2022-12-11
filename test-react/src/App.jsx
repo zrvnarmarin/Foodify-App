@@ -2,44 +2,56 @@ import React from 'react'
 import { useState } from 'react'
 import EmployeesTable from './components/EmployeesTable'
 
-const range = (start, end) => {
-  return [...Array(end).keys()].map(el => el + start)
-}
-
-const PaginationItem = ({page, currentPage, onPageChange}) => {
-  return (
-    <li onClick={onPageChange}>
-      <span>{page}</span>
-    </li>
-  )
-}
-
-const Pagination = ({currentPage, total, limit, onPageChange}) => {
-  const pagesCount = Math.ceil(total / limit)
-  const pages = range(1, pagesCount)
-  console.log(pages)
-
-  return (
-    <ul>
-      {pages.map(page => (
-        <PaginationItem
-          page={page} 
-          key={page}
-          currentPage={currentPage} 
-          onPageChange={onPageChange} 
-        />
-      ))}
-    </ul>
-  )
-}
+const list_items = [
+	"Item 1",
+	"Item 2",
+	"Item 3",
+	"Item 4",
+	"Item 5",
+	"Item 6",
+	"Item 7",
+	"Item 8",
+	"Item 9",
+	"Item 10",
+	"Item 11",
+	"Item 12",
+	"Item 13",
+	"Item 14",
+	"Item 15",
+	"Item 16",
+	"Item 17",
+	"Item 18",
+	"Item 19",
+	"Item 20",
+	"Item 21",
+	"Item 22"
+];
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState(1)
-  return (
-    <div>
-      <Pagination currentPage={currentPage} total={500} limit={20} onPageChange={(page) => setCurrentPage(page)} />
+  const [rows, setRows] = useState(5)
 
-    </div>
+  const displayList = (items, wrapper, rows_per_page, page) => {
+    let start = rows_per_page * page;
+	  let end = start + rows_per_page;
+	  let paginatedItems = items.slice(start, end);
+
+    for (let i = 0; i < paginatedItems.length; i++) {
+      let item = paginatedItems[i];
+  
+      let item_element = document.createElement('div');
+      item_element.classList.add('item');
+      item_element.innerText = item;
+      
+      wrapper.appendChild(item_element);
+    }
+  }
+
+  return(
+    <main>
+      <div ></div>
+      <div ></div>
+	</main>
   )
 }
 
