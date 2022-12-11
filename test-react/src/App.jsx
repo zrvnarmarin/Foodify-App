@@ -1,57 +1,91 @@
 import React from 'react'
-import { useState } from 'react'
-import EmployeesTable from './components/EmployeesTable'
+import { createContext, useState, useContext } from 'react'
 
-const list_items = [
-	"Item 1",
-	"Item 2",
-	"Item 3",
-	"Item 4",
-	"Item 5",
-	"Item 6",
-	"Item 7",
-	"Item 8",
-	"Item 9",
-	"Item 10",
-	"Item 11",
-	"Item 12",
-	"Item 13",
-	"Item 14",
-	"Item 15",
-	"Item 16",
-	"Item 17",
-	"Item 18",
-	"Item 19",
-	"Item 20",
-	"Item 21",
-	"Item 22"
-];
+export const MovieContext = createContext()
+
+export const MovieProvider = (props) => {
+	const [movies, setMovies] = useState([
+		{ name: 'Pulp fiction', price: '234', id: 23456 },
+		{ name: 'Kill Bill 2', price: '567', id: 456 },
+		{ name: 'Batman', price: '4567', id: 2346 },
+	])
+
+	return (
+		<MovieContext.Provider value={[movies, setMovies]}>
+			{props.children}
+		</MovieContext.Provider>
+	)
+}
+
+const Movie = () => {
+	return (
+		<div>
+			<MovieData />
+		</div>
+	)
+}
+
+const MovieData = () => {
+	const [movies, setMovies] = useContext(MovieContext)
+
+	return (
+		<div>
+			{movies.map(movie => {
+				return <p 
+					className='bg-blue-600 text-white text-xl p-4'
+					key={movie.id}>
+					{movie.name}
+				</p>
+			})}
+		</div>
+	)
+}
+
+const Items = () => {
+	const [movies, setMovies] = useContext(MovieContext)
+	return (
+		<div className='bg-red-600 text-white text-xl p-4'>
+			ALL MOVIES COUNT: {movies.length}
+			{movies.map(movie => {
+				return <div key={movie.id}>
+					<div>{movie.name}</div>
+					<div>{movie.price}</div>
+					<div>{movie.id}</div>
+				</div>
+			})}
+		</div>
+	)
+}
+
+const AddMovie = () => {
+	const [movies, setMovies] = useContext(MovieContext)
+	const [name, setName] = useState('')
+	const [price, setPrice] = useState('')
+
+	const nameInputHandler = e => setName(e.target.value)
+	const priceInputHandler = e => setPrice(e.target.value)
+
+	const addMovieHandler = e => {
+		e.preventDefault()
+		setMovies(prev => [...prev, { name: name, price: price, id:  }])
+	}
+
+	return (
+		<form onSubmit={addMovieHandler} className='flex flex-co gap-2 bg-blue-800 text-black p-4'>
+			<input onChange={nameInputHandler} type="text" value={name} name='name' />
+			<input onChange={priceInputHandler} type="text" value={price} name='price' />
+			<button>Submit</button>
+		</form>
+	)
+}
 
 const App = () => {
-  const [currentPage, setCurrentPage] = useState(1)
-  const [rows, setRows] = useState(5)
-
-  const displayList = (items, wrapper, rows_per_page, page) => {
-    let start = rows_per_page * page;
-	  let end = start + rows_per_page;
-	  let paginatedItems = items.slice(start, end);
-
-    for (let i = 0; i < paginatedItems.length; i++) {
-      let item = paginatedItems[i];
-  
-      let item_element = document.createElement('div');
-      item_element.classList.add('item');
-      item_element.innerText = item;
-      
-      wrapper.appendChild(item_element);
-    }
-  }
-
-  return(
-    <main>
-      <div ></div>
-      <div ></div>
-	</main>
+  return (
+	<MovieProvider>
+		<Movie />
+		<Items />
+		<AddMovie />
+	</MovieProvider>
   )
 }
 
