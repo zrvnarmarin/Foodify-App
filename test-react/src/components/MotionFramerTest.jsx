@@ -18,7 +18,7 @@ const MotionFramerTest = () => {
             variants={nextVariant}
             initial="hidden"
             animate="visible"
-            className='bg-red-400 border-2 border-black p-6 rounded-2xl mt-5'
+            className='bg-red-400 border-2 border-black p-6 rounded-2xl'
             >
             Marine bok legendo!
             </motion.div>
