@@ -1,5 +1,5 @@
 import React from 'react'
-//stiffnes property vazi smao ako je type: spring
+//stiffnes property vazi smao ako je type: springg
 
 const MotionFramerTest = () => {
   return (
