@@ -38,7 +38,7 @@ const Patients = () => {
         dispatch({type: ACTIONS.ADD_PERSON, payload: { 
             id: Math.floor((1 + Math.random()) * 0x10000),  
             name: state.name, 
-            number: state.number 
+            number: state.number,
         }})
     }
 
