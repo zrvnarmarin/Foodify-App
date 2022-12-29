@@ -27,22 +27,32 @@ function tasksReducer (state, action) {
 		case ACTIONS.DELETE_TASK: {
 			return { ...state, tasks: state.tasks.filter(task => task.id !== action.payload.id) }
 		}
-		// case ACTIONS.EDIT_TASK: {
-		// 	return { }
-		// }
-		case ACTIONS.TOGGLE_EDITING: {
-			return { ...state, isEditing: !state.isEditing }
+		case ACTIONS.EDIT_TASK: {
+			return {
+				...state,
+				tasks: state.tasks.map(task => {
+					if (task.id === action.payload.id) {
+						return {...task, task: action.payload.task}
+					}
+					return task
+				})
+			}
 		}
 	}
 }
 
 const App = () => {
-	const [state, dispatch] = useReducer(tasksReducer, { task: '', id: 1, tasks: [], isEditing: false })
+	const [state, dispatch] = useReducer(tasksReducer, { task: '', id: 0, tasks: [], isEditing: false })
 	const [isTaskTableShown, setIsTaskTableShown] = useState(false)
-	// const [isEditing, setIsEditing] = useState(false)
+	const [editedInputValue, setEditedInputValue] = useState('')
 
 	const inputHandler = (e) => {
 		dispatch({ type: ACTIONS.SET_TASK, payload: e.target.value })
+	}
+
+	const editTaskInputHandler = (e) => {
+		console.log(e.target.value)
+		setEditedInputValue(e.target.value)
 	}
 
 	const showTaskTableHandler = () => setIsTaskTableShown(prev => !prev)
@@ -77,6 +87,7 @@ const App = () => {
 				>
 					{ !isTaskTableShown ? 'Show Tasks' : 'Hide Tasks' }
 				</button>
+				<input onChange={editTaskInputHandler} placeholder="Enter updated value" className="flex border-black border-4" />
 			</div>
 			{ isTaskTableShown && <table className="border-solid border-black border-2">
 				<thead>
@@ -90,11 +101,17 @@ const App = () => {
 					{state.tasks.map(task=> {
 						return <tr key={task.id}>
 							<td className="border-solid border-black border-2 text-center">{task.id}.</td>
-							<td className="p-2 border-solid border-black border-2">{!state.isEditing ? task.task : <input />}</td>
+							<td className="p-2 border-solid border-black border-2">
+								{/* {!state.isEditing 
+								? task.task 
+								: <input type="text" onChange={editTaskInputHandler} className='text-black' />} */}
+								{/* { !state.isEditing ? task.task : <input type="text" /> } */}
+								{ task.task }
+							</td>
 							<td className="flex flex-row gap-4 p-3 flex-wrap">
 							<button 
 								onClick={() => {
-									dispatch({ type: ACTIONS.DELETE_TASK, payload: { id: task.id }})
+									dispatch({ type: ACTIONS.DELETE_TASK, payload: { id: task.id, task: task.task }})
 								}} 
 								className="uppercase p-2 rounded-md font-lg bg-red-600 text-white font-medium"
 							>
@@ -107,9 +124,7 @@ const App = () => {
 							</button>
 							<button 
 								onClick={() => {
-									// dispatch({ type: ACTIONS.EDIT_TASK, payload: { id: task.id }})
-									// setIsEditing(prev => !prev)
-									dispatch({ type: ACTIONS.TOGGLE_EDITING })
+									dispatch({ type: ACTIONS.EDIT_TASK, payload: { id: task.id, task: editedInputValue }})
 								}}
 								className="uppercase p-2 rounded-md font-lg bg-yellow-500 text-white font-medium"
 							>
@@ -124,6 +139,8 @@ const App = () => {
 			TASKS: {state.tasks.map(task => {
 				return <p key={task.id}>{JSON.stringify(task)}</p>
 			})} <br />
+			TASK: {state.task} <br />
+			IS EDITING: {state.isEditing.toString()}
 		</div>
 	)
 }
