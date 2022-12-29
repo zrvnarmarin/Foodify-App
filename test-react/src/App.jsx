@@ -1,13 +1,15 @@
 import { useReducer, useState } from "react";
 
 const ACTIONS = {
-	INCREASE_ID: 'increase id',
+	INCREASE_TASK_ID: 'increase id',
 	SET_TASK: 'set task',
 	RESET_TASK: 'reset task',
 	ADD_TASK: 'add task',
 	DELETE_TASK: 'delete task',
 	EDIT_TASK: 'edit task',
-	TOGGLE_EDITING: 'toggle editing'
+	FINISHED_TODO: 'finished todo',
+	SET_FILTER: 'set filter',
+	FILTERED_TASKS: 'filtered tasks'
 }
 
 function tasksReducer (state, action) {
@@ -18,7 +20,7 @@ function tasksReducer (state, action) {
 		case ACTIONS.RESET_TASK: {
 			return { ...state, task: '' }
 		}
-		case ACTIONS.INCREASE_ID: {
+		case ACTIONS.INCREASE_TASK_ID: {
 			return { ...state, id: state.id + 1}
 		}
 		case ACTIONS.ADD_TASK: {
@@ -38,33 +40,65 @@ function tasksReducer (state, action) {
 				})
 			}
 		}
+		case ACTIONS.FINISHED_TODO: {
+			return { ...state, tasks: state.tasks.map(task => {
+				if (task.id === action.payload.id) {
+					return {...task, finished: !task.finished }
+				}
+				return task
+			}) }
+		}
+		// case ACTIONS.SET_FILTER: {
+		// 	return { ...state, filter: action.payload.filter }
+		// }
+		case ACTIONS.FILTERED_TASKS: {
+			return { ...state, tasks: createFilteredTasks(action.payload.filter, state.tasks)}
+		}
 	}
 }
 
+const createFilteredTasks = (filter, tasks) => {
+	const allTasks = tasks.map(task => { return task })
+	const finishedTasks = tasks.filter(task => task.finished === true)
+	const activeTasks = tasks.filter(task => task.finished === false)
+
+	if (filter === 'all') return allTasks
+	if (filter === 'finished') return finishedTasks
+	if (filter === 'active') return activeTasks
+}
+
 const App = () => {
-	const [state, dispatch] = useReducer(tasksReducer, { task: '', id: 0, tasks: [], isEditing: false })
+	const [state, dispatch] = useReducer(tasksReducer, { task: '', id: 0, tasks: [], isEditing: false, filter: 'all' })
 	const [isTaskTableShown, setIsTaskTableShown] = useState(false)
 	const [editedInputValue, setEditedInputValue] = useState('')
+	const [isEditButtonsShown, setIsEditButtonsShown] = useState(false)
 
 	const inputHandler = (e) => {
 		dispatch({ type: ACTIONS.SET_TASK, payload: e.target.value })
 	}
+
+	const enableTaskEditing = () => setIsEditButtonsShown(true)
+	const cancelTaskEditing = () => setIsEditButtonsShown(false)
+	const showTaskTableHandler = () => setIsTaskTableShown(prev => !prev)
 
 	const editTaskInputHandler = (e) => {
 		console.log(e.target.value)
 		setEditedInputValue(e.target.value)
 	}
 
-	const showTaskTableHandler = () => setIsTaskTableShown(prev => !prev)
-
 	const submitHandler = (e) => {
 		e.preventDefault()
 		if (state.task === '') return
 
 		dispatch({ type: ACTIONS.RESET_TASK })
-		dispatch({ type: ACTIONS.INCREASE_ID })
-		dispatch({ type: ACTIONS.ADD_TASK, payload: { id: state.id, task: state.task }})
+		dispatch({ type: ACTIONS.INCREASE_TASK_ID })
+		dispatch({ type: ACTIONS.ADD_TASK, payload: { id: state.id, task: state.task, finished: false }})
 		setIsTaskTableShown(true)
+	}
+
+	const setTaskFilterHandler = (e) => {
+		console.log(e.target.value)
+		dispatch({ type: ACTIONS.FILTERED_TASKS, payload: { filter: e.target.value }})
 	}
 
 	return (
@@ -87,7 +121,12 @@ const App = () => {
 				>
 					{ !isTaskTableShown ? 'Show Tasks' : 'Hide Tasks' }
 				</button>
-				<input onChange={editTaskInputHandler} placeholder="Enter updated value" className="flex border-black border-4" />
+				<select onChange={setTaskFilterHandler} className="border-2 border-black pl-2 rounded-md">
+					<option value="all">All</option>
+					<option value="active">Active</option>
+					<option value="finished">Finished</option>
+				</select>
+				{ isEditButtonsShown && <input onChange={editTaskInputHandler} placeholder="Enter updated value" className="flex border-black border-2 pl-2 rounded-md" />}
 			</div>
 			{ isTaskTableShown && <table className="border-solid border-black border-2">
 				<thead>
@@ -101,13 +140,7 @@ const App = () => {
 					{state.tasks.map(task=> {
 						return <tr key={task.id}>
 							<td className="border-solid border-black border-2 text-center">{task.id}.</td>
-							<td className="p-2 border-solid border-black border-2">
-								{/* {!state.isEditing 
-								? task.task 
-								: <input type="text" onChange={editTaskInputHandler} className='text-black' />} */}
-								{/* { !state.isEditing ? task.task : <input type="text" /> } */}
-								{ task.task }
-							</td>
+							<td className="p-2 border-solid border-black border-2">{ task.task }</td>
 							<td className="flex flex-row gap-4 p-3 flex-wrap">
 							<button 
 								onClick={() => {
@@ -118,18 +151,36 @@ const App = () => {
 								Delete
 							</button>
 							<button 
+								onClick={() => {
+									dispatch({ type: ACTIONS.FINISHED_TODO, payload: { id: task.id } })
+								}}
 								className="uppercase p-2 rounded-md font-lg bg-green-500 text-white font-medium"
 							>
 								Finished
 							</button>
-							<button 
-								onClick={() => {
-									dispatch({ type: ACTIONS.EDIT_TASK, payload: { id: task.id, task: editedInputValue }})
-								}}
+							{ !isEditButtonsShown 
+							? <button 
+								onClick={enableTaskEditing}
 								className="uppercase p-2 rounded-md font-lg bg-yellow-500 text-white font-medium"
 							>
 								Edit
-							</button>
+							</button> 
+							: <div className="flex flex-row gap-4 flex-wrap">
+								<button
+									onClick={() => {
+									dispatch({ type: ACTIONS.EDIT_TASK, payload: { id: task.id, task: editedInputValue } })}}
+									className="uppercase p-2 rounded-md font-lg bg-blue-600 text-white font-medium"
+								>
+									Save
+								</button>
+								<button 
+									className="uppercase p-2 rounded-md font-lg bg-red-600 text-white font-medium"
+									onClick={cancelTaskEditing}
+								>
+									Cancel
+								</button>
+							</div>
+							}
 						</td>
 						</tr>
 					})}
@@ -140,7 +191,8 @@ const App = () => {
 				return <p key={task.id}>{JSON.stringify(task)}</p>
 			})} <br />
 			TASK: {state.task} <br />
-			IS EDITING: {state.isEditing.toString()}
+			IS EDITING: {state.isEditing.toString()} <br />
+			FILTER: {state.filter}
 		</div>
 	)
 }
