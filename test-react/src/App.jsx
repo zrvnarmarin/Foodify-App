@@ -202,7 +202,7 @@
 
 // export default App;
 
-import React, { createContext, useContext, useState } from "react";
+
 // const NameContext = createContext();
 
 // const ChildOne = () => {
@@ -234,8 +234,15 @@ import React, { createContext, useContext, useState } from "react";
 
 // export default App;
 
-const App = () => {
+import React, { createContext, useContext, useState } from "react";
+import Header from "./components/Layout/Header";
 
+const App = () => {
+	return(
+		<div>
+			<Header />
+		</div>
+	)
 }
 
 export default App;
