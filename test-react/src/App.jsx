@@ -239,9 +239,9 @@ import Header from "./components/Layout/Header";
 
 const App = () => {
 	return(
-		<div>
+		<>
 			<Header />
-		</div>
+		</>
 	)
 }
 
