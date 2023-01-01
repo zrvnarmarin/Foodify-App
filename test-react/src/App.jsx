@@ -203,33 +203,39 @@
 // export default App;
 
 import React, { createContext, useContext, useState } from "react";
-const NameContext = createContext();
+// const NameContext = createContext();
 
-const ChildOne = () => {
-	return (
-		<div>
-			<ChildTwo />
-		</div>
-	)
-}
+// const ChildOne = () => {
+// 	return (
+// 		<div>
+// 			<ChildTwo />
+// 		</div>
+// 	)
+// }
 
-const ChildTwo = () => {
-	const name = useContext(NameContext)
-	return (
-		<div>
-			<h1>{name}</h1>
-		</div>
-	)
-}
+// const ChildTwo = () => {
+// 	const name = useContext(NameContext)
+// 	return (
+// 		<div>
+// 			<h1>{name}</h1>
+// 		</div>
+// 	)
+// }
+
+// const App = () => {
+// 	return(
+// 		<div>
+// 			<NameContext.Provider value={'marin je ime!'}>
+// 				<ChildOne />
+// 			</NameContext.Provider>
+// 		</div>
+// 	)
+// }
+
+// export default App;
 
 const App = () => {
-	return(
-		<div>
-			<NameContext.Provider value={'marin je ime!'}>
-				<ChildOne />
-			</NameContext.Provider>
-		</div>
-	)
+
 }
 
 export default App;
