@@ -236,12 +236,16 @@
 
 import React, { createContext, useContext, useState } from "react";
 import Header from "./components/Layout/Header";
+import Meals from "./components/Meals/Meals";
 
 const App = () => {
 	return(
-		<>
+		<div className="bg-gray-700">
 			<Header />
-		</>
+			<main className="bg-red-500 flex items-center justify-center">
+				<Meals />
+			</main>
+		</div>
 	)
 }
 
