@@ -6,7 +6,7 @@ const Header = ({ onModalOpen }) => {
   return (
     <>
       <header className='bg-orange-700 flex justify-around p-4'>
-        <h1 className='text-5xl font-medium text-white'>React Meals</h1>
+        <h1 className='text-5xl font-medium text-white'>Krišćn Food Shop</h1>
         <HeaderCartButton onModalOpen={onModalOpen} />
       </header>
       <div className=''>

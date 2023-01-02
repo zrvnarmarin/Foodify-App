@@ -1,7 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import CartIcon from '../../assets/cart.svg'
+import CartContext from '../../store/cartContext'
 
 const HeaderCartButton = ({ onModalOpen }) => {
+  const cartContext = useContext(CartContext)
+  const numberOfCartItems = cartContext.items.reduce((curr, item) => {
+    return curr + item.amount
+  }, 0)
+
   return (
     <button 
       onClick={onModalOpen}
@@ -12,7 +18,7 @@ const HeaderCartButton = ({ onModalOpen }) => {
       src={CartIcon} 
       />
         <span className=''>Your Cart</span>
-        <span className='bg-orange-300 rounded-xl px-3'>3</span>
+        <span className='bg-orange-300 rounded-xl px-3'>{numberOfCartItems}</span>
     </button>
   )
 }

@@ -238,6 +238,7 @@ import React, { createContext, useContext, useState } from "react";
 import Header from "./components/Layout/Header";
 import Meals from "./components/Meals/Meals";
 import Cart from "./components/Cart/Cart";
+import CartProvider from "./store/CartProvider";
 
 const App = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false)
@@ -245,13 +246,13 @@ const App = () => {
     const closeModal = () => setIsModalOpen(false)
 
 	return(
-		<div className="bg-gray-700">
+		<CartProvider>
 			{ isModalOpen && <Cart onModalClose={closeModal} />}
 			<Header onModalOpen={openModal} />
 			<main className="bg-red-500 flex items-center justify-center">
 				<Meals />
 			</main>
-		</div>
+		</CartProvider>
 	)
 }
 
