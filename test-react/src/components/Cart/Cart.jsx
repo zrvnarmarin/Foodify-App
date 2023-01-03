@@ -5,14 +5,12 @@ import CartItem from './CartItem';
 
 const Cart = ({ onModalClose }) => {
     const cartContext = useContext(CartContext)
+    
     const totalAmount = `$${cartContext.totalAmount.toFixed(2)}`
     const hasItems = cartContext.items > 0
-    const removeCartItem = (id) => {
 
-    }
-    const addCartItem = (item) => {
-
-    }
+    const removeCartItem = (id) => cartContext.removeItem(id)
+    const addCartItem = (item) => cartContext.addItem({...item, amount: 1})
 
   return (
     <Modal>
@@ -23,8 +21,8 @@ const Cart = ({ onModalClose }) => {
                     name={item.name}
                     amount={item.amount}
                     price={item.price}
-                    onRemove={removeCartItem}
-                    onAdd={addCartItem}
+                    onRemoveItem={removeCartItem.bind(null, item.id)}
+                    onAddItem={addCartItem.bind(null, item)}
                     className='m-2 text-xl font-bold uppercase'
                 >
                     {item.name}

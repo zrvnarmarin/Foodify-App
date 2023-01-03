@@ -14,8 +14,8 @@ const CartItem = (props) => {
         </div>
 
         <div className='flex flex-row'>
-          <button className='font-bold text-xl rounded-lg border-2 hover:bg-orange-400 border-orange-400 px-2 m-1 cursor-pointer' onClick={props.onRemove}>−</button>
-          <button className='font-bold text-xl rounded-lg border-2 hover:bg-orange-400 border-orange-400 px-2 m-1 cursor-pointer' onClick={props.onAdd}>+</button>
+          <button className='font-bold text-xl rounded-lg border-2 hover:bg-orange-400 border-orange-400 px-2 m-1 cursor-pointer' onClick={props.onRemoveItem}>−</button>
+          <button className='font-bold text-xl rounded-lg border-2 hover:bg-orange-400 border-orange-400 px-2 m-1 cursor-pointer' onClick={props.onAddItem}>+</button>
         </div>
       </li>
     );
