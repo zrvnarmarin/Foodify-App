@@ -75,23 +75,3 @@ const CartProvider = (props) => {
 }
 
 export default CartProvider;
-
-// const existingCartItemIndex = state.items.findIndex(item => item.id === action.item.id)
-//             const existingCartItem = state.items[existingCartItemIndex]
-//             let updatedItems;
-
-//             if (existingCartItem) {
-//                 const updatedItem = {
-//                     ...existingCartItem,
-//                     amount: existingCartItem.amount + action.payload.item.amount
-//                 }
-//                 updatedItems = [...state.items]
-//                 updatedItems[existingCartItemIndex] = updatedItem
-//             } else {
-//                 updatedItems = state.items.concat(action.items) 
-//             }
-
-//             return {
-//                 totalAmount: state.totalAmount + action.payload.amount * action.payload.price, 
-//                 items: updatedItems
-//             }
