@@ -1,3 +1,1 @@
-https://www.tutorialrepublic.com/snippets/preview.php?topic=bootstrap&file=table-with-add-and-delete-row-feature
-https://devtrium.com/posts/how-to-use-react-usereducer-hook
-https://devtrium.com/posts/how-use-react-context-pro
+json server resources: http://localhost:3000/marins

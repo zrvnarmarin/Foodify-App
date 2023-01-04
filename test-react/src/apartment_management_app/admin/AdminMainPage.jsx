@@ -1,10 +1,10 @@
 import React from 'react';
 import { Route, Routes, Link } from 'react-router-dom';
-import Apartments from './Apartments';
-import Tags from './Tags';
-import RegisteredUsers from '../RegisteredUsers.jsx'
-import Home from '../Home';
-import Navbar from '../Navbar';
+import Apartments from './Apartments.jsx';
+import Tags from './Tags.jsx';
+import RegisteredUsers from './RegisteredUsers.jsx'
+import Home from './Home.jsx';
+import Navbar from './Navbar';
 
 const AdminMainPage = () => {
   return (
