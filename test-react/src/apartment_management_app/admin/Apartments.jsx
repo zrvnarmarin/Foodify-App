@@ -1,5 +1,6 @@
 import React from 'react'
 import { apartments } from './database/db'
+import NewApartmentForm from './NewApartmentForm.jsx'
 
 const Apartments = () => {
   const statusFilterOptions = ['Free', 'Reserved', 'Occupied']
@@ -76,6 +77,7 @@ const Apartments = () => {
       <div className='flex items-center justify-end'>
         <button className='bg-white text-blue-600 border-t-2 px-4 py-2 font-bold rounded-2xl text-sm mt-8 border-2 border-solid border-black'>Add New Apartment</button>
       </div>
+      <NewApartmentForm />
     </div>
   )
 }

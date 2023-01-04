@@ -89,6 +89,7 @@ export const apartments =  [
   ]
 
   export const tags = [
+    'All',
     'Internet/Wi-fi',
     'TV',
     'Netflix',
