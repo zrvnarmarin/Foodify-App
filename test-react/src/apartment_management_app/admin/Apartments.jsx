@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { apartments } from './database/db'
 import NewApartmentForm from './NewApartmentForm.jsx'
 
@@ -7,6 +7,9 @@ const Apartments = () => {
   const apartmentCities = ['Zadar', 'Biograd Na Moru', 'Split']
   const sortOptions = ['Price', 'Number Of Rooms']
   const changeStatusFilterOptions = (e) => {}
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const openModal = () => setIsModalOpen(true)
+  const closeModal = () => setIsModalOpen(false)
 
   return (
     <div className='p-4 m-8 bg-blue-600'>
@@ -75,9 +78,14 @@ const Apartments = () => {
       </section>
 
       <div className='flex items-center justify-end'>
-        <button className='bg-white text-blue-600 border-t-2 px-4 py-2 font-bold rounded-2xl text-sm mt-8 border-2 border-solid border-black'>Add New Apartment</button>
+        <button 
+          onClick={openModal} 
+          className='bg-white text-blue-600 border-t-2 px-4 py-2 font-bold rounded-2xl text-sm mt-8 border-2 border-solid border-black'
+        >
+          Add New Apartment
+        </button>
       </div>
-      <NewApartmentForm />
+      { isModalOpen && <NewApartmentForm onCloseModal={closeModal} />}
     </div>
   )
 }

@@ -1,15 +1,8 @@
 import React from 'react'
 import NewApartmentModal from './NewApartmentModal'
 import { tags } from './database/db'
-import { useState } from 'react'
 
-const NewApartmentForm = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false)
-    const openModal = () => setIsModalOpen(true)
-    const closeModal = () => setIsModalOpen(false)
-    const formSubmitHandler = (e) => {
-
-    }
+const NewApartmentForm = ({ onCloseModal }) => {
 
   return (
     <NewApartmentModal>
@@ -61,9 +54,10 @@ const NewApartmentForm = () => {
                     </select>
                 </div>
             </form>
+
             <div className='flex items-center justify-around'>
                 <button className='bg-blue-600 text-white border-t-2 px-4 py-2 font-bold rounded-2xl text-sm mt-8 border-2 border-solid border-black'>Add New Apartment</button>
-                <button onClick={closeModal} className='bg-red-600 text-white border-t-2 px-4 py-2 font-bold rounded-2xl text-sm mt-8 border-2 border-solid border-black'>Close</button>
+                <button onClick={onCloseModal} className='bg-red-600 text-white border-t-2 px-4 py-2 font-bold rounded-2xl text-sm mt-8 border-2 border-solid border-black'>Close</button>
             </div>
         </div>
     </NewApartmentModal>
