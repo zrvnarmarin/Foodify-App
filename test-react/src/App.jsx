@@ -234,25 +234,40 @@
 
 // export default App;
 
-import React, { createContext, useContext, useState } from "react";
-import Header from "./components/Layout/Header";
-import Meals from "./components/Meals/Meals";
-import Cart from "./components/Cart/Cart";
-import CartProvider from "./store/CartProvider";
+// import React, { createContext, useContext, useState } from "react";
+// import Header from "./components/Layout/Header";
+// import Meals from "./components/Meals/Meals";
+// import Cart from "./components/Cart/Cart";
+// import CartProvider from "./store/CartProvider";
+
+// const App = () => {
+// 	const [isModalOpen, setIsModalOpen] = useState(false)
+//     const openModal = () => setIsModalOpen(true)
+//     const closeModal = () => setIsModalOpen(false)
+
+// 	return(
+// 		<CartProvider>
+// 			{ isModalOpen && <Cart onModalClose={closeModal} />}
+// 			<Header onModalOpen={openModal} />
+// 			<main className="bg-red-500 flex items-center justify-center">
+// 				<Meals />
+// 			</main>
+// 		</CartProvider>
+// 	)
+// }
+
+// export default App;
+
+import React, { useState, useContext } from "react";
+import { BrowserRouter } from 'react-router-dom';
+import Login from "./apartment_management_app/admin/Login";
+import AdminMainPage from "./apartment_management_app/admin/AdminMainPage";
 
 const App = () => {
-	const [isModalOpen, setIsModalOpen] = useState(false)
-    const openModal = () => setIsModalOpen(true)
-    const closeModal = () => setIsModalOpen(false)
-
 	return(
-		<CartProvider>
-			{ isModalOpen && <Cart onModalClose={closeModal} />}
-			<Header onModalOpen={openModal} />
-			<main className="bg-red-500 flex items-center justify-center">
-				<Meals />
-			</main>
-		</CartProvider>
+		<BrowserRouter>
+			<AdminMainPage />
+		</BrowserRouter>
 	)
 }
 
