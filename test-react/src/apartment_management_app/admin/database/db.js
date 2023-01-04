@@ -87,3 +87,18 @@ export const apartments =  [
       ]
     }
   ]
+
+  export const tags = [
+    'Internet/Wi-fi',
+    'TV',
+    'Netflix',
+    'HBO Max',
+    'Pets Allowed',
+    'Smoking Allowed',
+    'Parking',
+    'Car Rental Service',
+    'Refrigerator',
+    'Microwave',
+    'Air Condition',
+    'Grill'
+  ]
