@@ -8,8 +8,8 @@ const Apartments = () => {
   const changeStatusFilterOptions = (e) => {}
 
   return (
-    <>
-      <div className='bg-blue-700 p-2 m-1 flex flex-row flx-wrap items-center justify-between'>
+    <div className='p-4 m-8 bg-blue-600'>
+      <div className='bg-blue-700  border-2 p-2 mb-8 m-1 flex flex-row flx-wrap items-center justify-between'>
         <div>
           <div className='bg-blue-400 p-2'>
             <label className='pr-2 text-xl text-white uppercase font-medium'>Status</label>
@@ -32,7 +32,7 @@ const Apartments = () => {
 
         <div>
           <div className='bg-blue-400 p-2'>
-              <label className='pr-2 text-xl text-white uppercase font-medium'>Sort</label>
+              <label className='pr-2 text-xl text-white uppercase font-medium'>Sort By</label>
               <select onChange={changeStatusFilterOptions}>
                 {sortOptions.map(option => {
                   return <option key={option}>{option}</option>
@@ -43,8 +43,8 @@ const Apartments = () => {
 
       </div>
 
-      <section>
-        <table className='border-2 border-black'>
+      <section className='bg-blue-100 border-2 border-white p-2 m-1 flex flex-row flx-wrap items-center justify-between'>
+        <table className='border-2 border-black w-full'>
           <thead className=''>
             <tr>
               <td className='p-2 border-2 border-black'>Status</td>
@@ -64,12 +64,19 @@ const Apartments = () => {
                 <td className='p-2 border-2 border-black'>{apartment.numberOfSingleBeds}</td>
                 <td className='p-2 border-2 border-black'>{apartment.numberOfDoubleBeds}</td>
                 <td className='p-2 border-2 border-black'>{apartment.price}</td>
+                <td className='border-t-2 border-black'>
+                  <button className='bg-white text-blue-600 border-t-2 px-4 py-2 font-bold rounded-2xl text-sm mt-8 border-2 border-solid border-black'>Open</button>
+                </td>
               </tr>
             )}
           </tbody>
         </table>
       </section>
-    </>
+
+      <div className='flex items-center justify-end'>
+        <button className='bg-white text-blue-600 border-t-2 px-4 py-2 font-bold rounded-2xl text-sm mt-8 border-2 border-solid border-black'>Add New Apartment</button>
+      </div>
+    </div>
   )
 }
 

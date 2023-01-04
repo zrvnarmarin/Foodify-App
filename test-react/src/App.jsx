@@ -144,7 +144,7 @@
 // 						return <tr key={task.id}>
 // 							<td className="border-solid border-black border-2 text-center">{task.id}.</td>
 // 							<td className="p-2 border-solid border-black border-2">{ task.task }</td>
-// 							<td className="flex flex-row gap-4 p-3 flex-wrap">
+// 							<td className="">
 // 							<button 
 // 								onClick={() => {
 // 									dispatch({ type: ACTIONS.DELETE_TASK, payload: { id: task.id, task: task.task }})
