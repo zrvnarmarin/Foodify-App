@@ -62,7 +62,7 @@ const apartmentReducer = (state, action) => {
                 numberOfDoubleBeds: state.numberOfDoubleBeds,
                 distanceFromTheSea: state.distanceFromTheSea, 
                 price: state.price,
-
+                tag: state.tag
             }}
         }
     }
@@ -78,7 +78,8 @@ const NewApartmentForm = ({ onCloseModal }) => {
         e.preventDefault()
 
         dispatch({ type: ACTIONS.SET_NEW_APARTMENT })
-        console.log(state.apartment)
+
+        apartmentContext.addApartment(state.apartment)
     }
     
 
