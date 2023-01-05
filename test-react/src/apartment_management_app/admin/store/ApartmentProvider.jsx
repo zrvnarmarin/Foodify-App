@@ -13,7 +13,7 @@ const apartmentReducer = (state, action) => {
             return {...state, apartments: [...state.apartments, action.payload]}
         }
         case ACTIONS.REMOVE_APARTMENT: {
-            return {}
+            return {...state, apartments: state.apartments.filter(apartment => apartment.id !== action.payload)}
         }
     }
 }
@@ -22,13 +22,13 @@ const ApartmentProvider = (props) => {
     const [state, dispatch] = useReducer(apartmentReducer, { apartments: [] })
 
     const addApartmentToList = (apartment) => dispatch({ type: ACTIONS.ADD_APARTMENT, payload: apartment })
-    const removeApartment = (id) => dispatch({ type: ACTIONS.REMOVE_APARTMENT, payload: id)
+    const removeApartmentFromList = (id) => dispatch({ type: ACTIONS.REMOVE_APARTMENT, payload: id})
 
     const apartmentContext = {
         apartments: state.apartments,
         totalAmount: state.totalAmount,
         addApartment: addApartmentToList,
-
+        removeApartment: removeApartmentFromList
     }
 
     return (

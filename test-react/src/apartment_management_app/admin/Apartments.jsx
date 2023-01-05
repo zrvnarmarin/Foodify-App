@@ -1,11 +1,15 @@
-import React, { useState } from 'react'
-import { apartments } from './database/db'
+import React, { useState, useContext } from 'react'
 import NewApartmentForm from './NewApartmentForm.jsx'
+import ApartmentContext from './store/apartmentContext'
+import Apartment from './Apartment.jsx'
 
 const Apartments = () => {
   const statusFilterOptions = ['Free', 'Reserved', 'Occupied']
   const apartmentCities = ['Zadar', 'Biograd Na Moru', 'Split']
   const sortOptions = ['Price', 'Number Of Rooms']
+
+  const apartmentContext = useContext(ApartmentContext)
+  const { apartments } = apartmentContext
 
   const changeStatusFilterOptions = (e) => {}
   
@@ -63,17 +67,15 @@ const Apartments = () => {
           </thead>
           <tbody>
             {apartments.map(apartment=> 
-              <tr key={apartment.id}>
-                <td className='p-2 border-2 border-black'>{apartment.status}</td>
-                <td className='p-2 border-2 border-black'>{apartment.city}</td>
-                <td className='p-2 border-2 border-black'>{apartment.numberOfRooms}</td>
-                <td className='p-2 border-2 border-black'>{apartment.numberOfSingleBeds}</td>
-                <td className='p-2 border-2 border-black'>{apartment.numberOfDoubleBeds}</td>
-                <td className='p-2 border-2 border-black'>{apartment.price}</td>
-                <td className='border-t-2 border-black'>
-                  <button className='bg-white text-blue-600 border-t-2 px-4 py-2 font-bold rounded-2xl text-sm mt-8 border-2 border-solid border-black'>Open</button>
-                </td>
-              </tr>
+              <Apartment 
+                key={apartment.name}
+                status={apartment.status} 
+                city={apartment.city} 
+                numberOfRooms={apartment.numberOfRooms} 
+                numberOfSingleBeds={apartment.numberOfSingleBeds}
+                numberOfDoubleBeds={apartment.numberOfDoubleBeds}
+                price={apartment.price}
+              />
             )}
           </tbody>
         </table>

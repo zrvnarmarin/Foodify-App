@@ -5,6 +5,7 @@ import Tags from './Tags.jsx';
 import RegisteredUsers from './RegisteredUsers.jsx'
 import Home from './Home.jsx';
 import Navbar from './Navbar';
+import Apartment from './Apartment.jsx'
 
 const AdminMainPage = () => {
   return (
@@ -13,6 +14,7 @@ const AdminMainPage = () => {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/apartments' element={<Apartments />} />
+        <Route path='/apartments/:id' element={<Apartment />} />
         <Route path='/registeredUsers' element={<RegisteredUsers />} />
         <Route path='/tags' element={<Tags />} />
       </Routes>

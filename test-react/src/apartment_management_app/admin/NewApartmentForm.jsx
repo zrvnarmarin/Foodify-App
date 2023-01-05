@@ -78,7 +78,6 @@ const NewApartmentForm = ({ onCloseModal }) => {
         e.preventDefault()
 
         dispatch({ type: ACTIONS.SET_NEW_APARTMENT })
-
         apartmentContext.addApartment(state.apartment)
     }
     
