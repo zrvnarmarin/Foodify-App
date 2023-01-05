@@ -18,7 +18,6 @@ const apartmentReducer = (state, action) => {
         }
         case ACTIONS.SHOW_APARTMENT_INFO: {
             const currentlySelectedItem = state.apartments.findIndex(apartment => apartment.id === action.payload.id)
-            console.log(currentlySelectedItem)
             return {...state}
         }
     }
