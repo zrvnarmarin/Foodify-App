@@ -17,7 +17,6 @@ const apartmentReducer = (state, action) => {
             return {...state, apartments: state.apartments.filter(apartment => apartment.id !== action.payload)}
         }
         case ACTIONS.SHOW_APARTMENT_INFO: {
-            const currentlySelectedItem = state.apartments.findIndex(apartment => apartment.id === action.payload.id)
             return {...state}
         }
     }
