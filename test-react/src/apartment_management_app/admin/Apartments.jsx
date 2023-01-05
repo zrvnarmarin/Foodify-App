@@ -2,11 +2,15 @@ import React, { useState, useContext } from 'react'
 import NewApartmentForm from './NewApartmentForm.jsx'
 import ApartmentContext from './store/apartmentContext'
 import Apartment from './Apartment.jsx'
+import ApartmentInfo from './ApartmentInfo.jsx'
 
 const Apartments = () => {
   const statusFilterOptions = ['Free', 'Reserved', 'Occupied']
   const apartmentCities = ['Zadar', 'Biograd Na Moru', 'Split']
   const sortOptions = ['Price', 'Number Of Rooms']
+  const [isApartmentInfoModalOpen, setIsApartmentInfoModalOpen] = useState(false)
+  const closeApartmentInfoModal = () => setIsApartmentInfoModalOpen(false)
+  const openApartmentInfoModal = () => setIsApartmentInfoModalOpen(true)
 
   const apartmentContext = useContext(ApartmentContext)
   const { apartments } = apartmentContext
@@ -68,13 +72,18 @@ const Apartments = () => {
           <tbody>
             {apartments.map(apartment=> 
               <Apartment 
+                description={apartment.description}
                 key={apartment.name}
+                title={apartment.title}
                 status={apartment.status} 
                 city={apartment.city} 
                 numberOfRooms={apartment.numberOfRooms} 
                 numberOfSingleBeds={apartment.numberOfSingleBeds}
                 numberOfDoubleBeds={apartment.numberOfDoubleBeds}
                 price={apartment.price}
+                tag={apartment.tag}
+                distanceFromTheSea={apartment.distanceFromTheSea}
+                onOpenInfo={openApartmentInfoModal}
               />
             )}
           </tbody>
@@ -90,6 +99,22 @@ const Apartments = () => {
         </button>
       </div>
       { isModalOpen && <NewApartmentForm onCloseModal={closeModal} />}
+
+    {/* { isApartmentInfoModalOpen && apartments.map(apartment => 
+      <ApartmentInfo
+        title={apartment.title}
+        address={apartment.address}
+        description={apartment.description}
+        distanceFromTheSea={apartment.distanceFromTheSea}
+        price={apartment.price}
+        status={apartment.status} 
+        city={apartment.city} 
+        numberOfRooms={apartment.numberOfRooms} 
+        numberOfSingleBeds={apartment.numberOfSingleBeds}
+        numberOfDoubleBeds={apartment.numberOfDoubleBeds}
+        onCloseInfo={closeApartmentInfoModal}
+      />
+    )} */}
     </div>
   )
 }

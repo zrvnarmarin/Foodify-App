@@ -53,6 +53,7 @@ const apartmentReducer = (state, action) => {
         }
         case ACTIONS.SET_NEW_APARTMENT: {
             return {...state, apartment: {
+                id: Math.floor(Math.random() * 100),
                 title: state.title,
                 description: state.description,
                 address: state.address,
@@ -142,7 +143,7 @@ const NewApartmentForm = ({ onCloseModal }) => {
                     className='border-black border-2 p-1 rounded' type="text" />
                 </div>
                 <div className='flex flex-row flex-wrap items-center justify-between gap-2'>
-                    <label>Tags: </label>
+                    <label>Tag: </label>
                     <select 
                     onChange={(e) => dispatch({ type: ACTIONS.SET_TAG, payload: { tag: e.target.value} })} 
                     className='border-2 border-black rounded p-1'>

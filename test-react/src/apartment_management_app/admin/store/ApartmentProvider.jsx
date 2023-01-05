@@ -4,7 +4,8 @@ import ApartmentContext from './apartmentContext'
 
 const ACTIONS = {
     ADD_APARTMENT: 'add apartment',
-    REMOVE_APARTMENT: 'remove apartment'
+    REMOVE_APARTMENT: 'remove apartment',
+    SHOW_APARTMENT_INFO: 'show apartment info'
 }
 
 const apartmentReducer = (state, action) => {
@@ -15,6 +16,11 @@ const apartmentReducer = (state, action) => {
         case ACTIONS.REMOVE_APARTMENT: {
             return {...state, apartments: state.apartments.filter(apartment => apartment.id !== action.payload)}
         }
+        case ACTIONS.SHOW_APARTMENT_INFO: {
+            const currentlySelectedItem = state.apartments.findIndex(apartment => apartment.id === action.payload.id)
+            console.log(currentlySelectedItem)
+            return {...state}
+        }
     }
 }
 
@@ -23,12 +29,14 @@ const ApartmentProvider = (props) => {
 
     const addApartmentToList = (apartment) => dispatch({ type: ACTIONS.ADD_APARTMENT, payload: apartment })
     const removeApartmentFromList = (id) => dispatch({ type: ACTIONS.REMOVE_APARTMENT, payload: id})
+    const showApartmentInfo = (apartment) => dispatch({ type: ACTIONS.SHOW_APARTMENT_INFO, payload: apartment})
 
     const apartmentContext = {
         apartments: state.apartments,
-        totalAmount: state.totalAmount,
+        currentlySelectedApartment: state.currentlySelectedApartment,
         addApartment: addApartmentToList,
-        removeApartment: removeApartmentFromList
+        removeApartment: removeApartmentFromList,
+        showCurrentlySelectedApartment: showApartmentInfo
     }
 
     return (
@@ -39,6 +47,3 @@ const ApartmentProvider = (props) => {
 }
 
 export default ApartmentProvider;
-
-// title: '', description: '', address: '', city: '', numberOfRooms: 0, numberOfSingleBeds: 0, numberOfDoubleBeds: 0, 
-//         distanceFromTheSea: 0, price: 0, tags: []
