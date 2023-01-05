@@ -1,5 +1,7 @@
 import React, { createContext } from "react";
 
-const ApartmentContext = createContext()
+const ApartmentContext = createContext({
+    addApartment: (apartment) => {},
+})
 
 export default ApartmentContext;

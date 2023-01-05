@@ -262,11 +262,14 @@ import React, { useState, useContext } from "react";
 import { BrowserRouter } from 'react-router-dom';
 import Login from "./apartment_management_app/admin/Login";
 import AdminMainPage from "./apartment_management_app/admin/AdminMainPage";
+import ApartmentProvider from './apartment_management_app/admin/store/ApartmentProvider.jsx'
 
 const App = () => {
 	return(
 		<BrowserRouter>
-			<AdminMainPage />
+			<ApartmentProvider>
+				<AdminMainPage />
+			</ApartmentProvider>
 		</BrowserRouter>
 	)
 }

@@ -10,7 +10,7 @@ const ACTIONS = {
 const apartmentReducer = (state, action) => {
     switch (action.type) {
         case ACTIONS.ADD_APARTMENT: {
-            return {}
+            console.log('javljam se iz contexta, a ovo je apartma objekt: ', action.payload)
         }
         case ACTIONS.REMOVE_APARTMENT: {
             return {}
@@ -19,13 +19,14 @@ const apartmentReducer = (state, action) => {
 }
 
 const ApartmentProvider = (props) => {
-    const [state, dispatch] = useReducer(apartmentReducer, {
-        apartments: [], totalAmount: 0
-    })
+    const [state, dispatch] = useReducer(apartmentReducer, { apartments: [] })
+
+    const addApartmentToList = (apartment) => dispatch({ type: ACTIONS.ADD_APARTMENT, payload: apartment })
 
     const apartmentContext = {
         apartments: state.apartments,
-        totalAmount: state.totalAmount
+        totalAmount: state.totalAmount,
+        addApartment: addApartmentToList
     }
 
     return (
@@ -36,3 +37,6 @@ const ApartmentProvider = (props) => {
 }
 
 export default ApartmentProvider;
+
+// title: '', description: '', address: '', city: '', numberOfRooms: 0, numberOfSingleBeds: 0, numberOfDoubleBeds: 0, 
+//         distanceFromTheSea: 0, price: 0, tags: []

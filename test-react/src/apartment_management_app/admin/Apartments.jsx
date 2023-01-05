@@ -6,7 +6,9 @@ const Apartments = () => {
   const statusFilterOptions = ['Free', 'Reserved', 'Occupied']
   const apartmentCities = ['Zadar', 'Biograd Na Moru', 'Split']
   const sortOptions = ['Price', 'Number Of Rooms']
+
   const changeStatusFilterOptions = (e) => {}
+  
   const [isModalOpen, setIsModalOpen] = useState(false)
   const openModal = () => setIsModalOpen(true)
   const closeModal = () => setIsModalOpen(false)
