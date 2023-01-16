@@ -235,25 +235,19 @@
 
 // export default App;
 
-// import React, { createContext, useContext, useState } from "react";
-// import Header from "./components/Layout/Header";
-// import Meals from "./components/Meals/Meals";
-// import Cart from "./components/Cart/Cart";
-// import CartProvider from "./store/CartProvider";
+// import React, { useState, useContext } from "react";
+// import { BrowserRouter } from 'react-router-dom';
+// import Login from "./apartment_management_app/admin/Login";
+// import AdminMainPage from "./apartment_management_app/admin/AdminMainPage";
+// import ApartmentProvider from './apartment_management_app/admin/store/ApartmentProvider.jsx'
 
 // const App = () => {
-// 	const [isModalOpen, setIsModalOpen] = useState(false)
-//     const openModal = () => setIsModalOpen(true)
-//     const closeModal = () => setIsModalOpen(false)
-
 // 	return(
-// 		<CartProvider>
-// 			{ isModalOpen && <Cart onModalClose={closeModal} />}
-// 			<Header onModalOpen={openModal} />
-// 			<main className="bg-red-500 flex items-center justify-center">
-// 				<Meals />
-// 			</main>
-// 		</CartProvider>
+// 		<BrowserRouter>
+// 			<ApartmentProvider>
+// 				<AdminMainPage />
+// 			</ApartmentProvider>
+// 		</BrowserRouter>
 // 	)
 // }
 
@@ -277,232 +271,28 @@
 
 // export default App;
 
-import React from "react";
-import ReactDOM from "react-dom";
-import MealsImage from './assets/meals.jpg'
-import CartIcon from './assets/icons8-shopping-cart-30.png'
 
-const Header = (props) => {
-	return (
-		<>
-			<header className="flex flex-row justify-around items-center px-4 py-4 bg-yellow-300">
-				<h1 className="font-poppins text-6xl font-semibold tracking-wide">Foodify</h1>
-				<HeaderCartButton />
-			</header>
-			<div>
-				<img
-					src={MealsImage}
-					alt="Image of Mc meals meals" 
-				/>
-			</div>
-		</>
-	)
-}
-
-const HeaderCartButton = (props) => {
-	return (
-		<button className="flex flex-row gap-6 items-center justify-around bg-yellow-600 px-10 py-2 rounded-2xl font-poppins font-semibold text-xl">
-			<span>
-				<img src={CartIcon} alt="Cart icon" />
-			</span>
-			<span>Your Cart</span>
-			<span className="py-2 px-4 bg-yellow-700 rounded-2xl">3</span>
-		</button>
-	)
-}
-
-const Meals = () => {
-	return (
-		<>
-			<MealsSummary />
-			<AvailableMeals />
-		</>
-	)
-}
-
-const MealsSummary = () => {
-	return (
-		<section className="p-4 font-roboto flex flex-col gap-4 items-center">
-			<h2 className="font-bold text-4xl">Delicious food delivered to you</h2>
-			<p className="font-semibold text-lg text-center">
-				Choose your favorite meal from our broad selection of available
-				meals and enjoy a delicious lunch or dinner at home.
-			</p>
-			<p className="font-semibold text-lg text-center">
-				All our meals are cooked with high-quality ingredients,
-				just-in-time and of course by experienced chefs!
-			</p>
-		</section>
-	)
-}
-
-const AvailableMeals = () => {
-	const DUMMY_MEALS = [
-		{
-		  id: 'm1',
-		  name: 'Sushi',
-		  description: 'Finest fish and veggies',
-		  price: 22.99,
-		},
-		{
-		  id: 'm2',
-		  name: 'Schnitzel',
-		  description: 'A german specialty!',
-		  price: 16.5,
-		},
-		{
-		  id: 'm3',
-		  name: 'Barbecue Burger',
-		  description: 'American, raw, meaty',
-		  price: 12.99,
-		},
-		{
-		  id: 'm4',
-		  name: 'Green Bowl',
-		  description: 'Healthy...and green...',
-		  price: 18.99,
-		},
-	  ];
-
-	return (
-		<section>
-			<div className="flex items-center justify-center">
-			<Card>
-				<ul>
-					{DUMMY_MEALS.map(meal =>
-						<MealItem
-							id={meal.id}
-							key={meal.id}
-							name={meal.name}
-							description={meal.description}
-							price={meal.price}
-						/>
-					)}
-				</ul>
-			</Card>
-			</div>
-		</section>
-	)
-}
-
-const Card = (props) => {
-	return (
-		<div className="w-[70%] border-2 border-black bg-white m-16 p-4 rounded-xl flex flex-col">
-			{props.children}
-		</div>
-	)
-}
-
-const MealItem = ({ name, description, price }) => {
-	const decimalPrice = `${price.toFixed(2)}`
-
-	return (
-		<li className="flex flex-row items-center justify-between pb-8">
-			<div className="p-2">
-				<h3 className="font-bold font-poppins text-xl">{name}</h3>
-				<div className="italic text-lg font-medium text-gray-700">{description}</div>
-				<div className=" text-yellow-600 font-bold text-lg">${decimalPrice}</div>
-			</div>
-			<div>
-				<NewMealItemForm />
-			</div>
-		</li>
-	)
-}
-
-const NewMealItemForm = (props) => {
-	return (
-		<form className="font-poppins flex flex-col items-center justify-center gap-2">
-			<Input
-				label="Amount"
-				input={{
-					id: 'amount ' + props.id,
-					type: 'number',
-					min: '1',
-					max: '5',
-					step: '1',
-					defaultValue: '1'
-				}}
-			/>
-			<button className="font-semibold text-xl rounded-2xl px-10 py-2 text-white bg-yellow-700">+ Add</button>
-		</form>
-	)
-}
-
-const Input = (props) => {
-	return (
-		<div className="flex flex-row items-center justify-between gap-4">
-			<label htmlFor={props.input.id} className='text-lg'>{props.label}</label>
-			<input className="border-[1px] border-gray-300 rounded-lg p-1 text-center" {...props.input} />
-		</div>
-	)
-}
-
-// Cart
-
-const Cart = (props) => {
-	const cartItems = [{id: '1', name: 'Sushi',  amount: 2, price: 10.99}]
-
-	return (
-		<Modal>
-			<ul className="">
-				{cartItems.map(item =>
-					<li className="text-gray-700 mb-2 font-semibold font-poppins text-xl" key={item.id}>{item.name}</li>
-				)}
-			</ul>
-			<div className="flex flex-row items-center mt-4 justify-between font-poppins">
-				<span className="font-bold text-2xl">Total Amount</span>
-				<span className="font-bold text-2xl">34.78</span>
-			</div>
-			<div className="flex flex-row p-2 items-center mt-4 justify-end gap-4 font-poppins">
-				<button className="font-semibold text-yellow-600 px-10 py-2 border-[1px] border-yellow-600 rounded-2xl">Close</button>
-				<button className="font-semibold text-white px-10 py-2 border-[1px] bg-yellow-600 rounded-2xl">Order</button>
-			</div>
-		</Modal>
-	)
-}
-
-const Backdrop = (props) => {
-    return(
-        <div className='fixed z-40 w-screen h-screen flex items-center justify-center bg-gray-900 bg-opacity-70'>
-            {props.children}
-        </div>
-    )
-}
-
-const ModalOverlay = (props) => {
-    return(
-        <Backdrop>
-            <div className='bg-white border-black border-2 rounded-2xl p-2
-             w-1/2 z-10'>
-                <div>{props.children}</div>
-            </div>
-        </Backdrop>
-    )
-}
-
-const Modal = (props) => {
-  const portalElement = document.getElementById('overlays')
-
-  return (
-    <>
-        {ReactDOM.createPortal(<Backdrop />, portalElement)}
-        {ReactDOM.createPortal(<ModalOverlay>{props.children}</ModalOverlay>,
-        portalElement)}
-    </>
-  )
-}
+import React, { createContext, useContext, useState } from "react";
+import Header from "./components/Layout/Header";
+import Meals from "./components/Meals/Meals";
+import Cart from "./components/Cart/Cart";
+import CartProvider from "./store/CartProvider";
 
 const App = () => {
-	return (
-		<div className="bg-yellow-300">
-			<Cart />
-			<Header />
-			<main>
+	const [isModalOpen, setIsModalOpen] = useState(false)
+    const openModal = () => setIsModalOpen(true)
+    const closeModal = () => setIsModalOpen(false)
+
+	return(
+		<CartProvider>
+			{ isModalOpen && <Cart onModalClose={closeModal} />}
+			<Header onModalOpen={openModal} />
+			<main className="bg-red-500 flex items-center justify-center">
 				<Meals />
 			</main>
-		</div>
+		</CartProvider>
 	)
 }
 
 export default App;
+

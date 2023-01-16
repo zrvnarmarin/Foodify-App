@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import CartIcon from '../../assets/cart.svg'
+import CartIcon from '../../assets/cart.png'
 import CartContext from '../../store/cartContext'
 
 const HeaderCartButton = ({ onModalOpen }) => {
